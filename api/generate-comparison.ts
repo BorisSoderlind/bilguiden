@@ -2,11 +2,6 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || '';
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-
 interface ImageResult {
   url: string;
   credit?: string;
@@ -14,7 +9,7 @@ interface ImageResult {
 }
 
 // Function to get car image - checks Supabase Storage first, then Unsplash as fallback
-const getCarImage = async (carName: string): Promise<ImageResult> => {
+const getCarImage = async (carName: string, supabaseUrl: string, unsplashKey?: string): Promise<ImageResult> => {
   // Create URL-friendly filename from car name
   const filename = carName.toLowerCase()
     .replace(/\s+/g, '-')
@@ -23,7 +18,7 @@ const getCarImage = async (carName: string): Promise<ImageResult> => {
     .replace(/ö/g, 'o');
   
   // Check if image exists in Supabase Storage
-  const supabaseImageUrl = `${SUPABASE_URL}/storage/v1/object/public/car-images/${filename}.jpg`;
+  const supabaseImageUrl = `${supabaseUrl}/storage/v1/object/public/car-images/${filename}.jpg`;
   
   try {
     // Try to fetch the Supabase image
@@ -38,12 +33,10 @@ const getCarImage = async (carName: string): Promise<ImageResult> => {
   }
   
   // Fallback to Unsplash API
-  const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
-  
-  if (!UNSPLASH_ACCESS_KEY) {
+  if (!unsplashKey) {
     console.warn('No Unsplash API key configured, using placeholder');
     return { 
-      url: 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/placeholder.jpg'
+      url: `${supabaseUrl}/storage/v1/object/public/car-images/placeholder.jpg`
     };
   }
   
@@ -54,7 +47,7 @@ const getCarImage = async (carName: string): Promise<ImageResult> => {
     
     const unsplashResponse = await fetch(unsplashUrl, {
       headers: {
-        'Authorization': `Client-ID ${UNSPLASH_ACCESS_KEY}`
+        'Authorization': `Client-ID ${unsplashKey}`
       }
     });
     
