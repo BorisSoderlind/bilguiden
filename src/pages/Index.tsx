@@ -8,10 +8,6 @@ import { Helmet } from "react-helmet-async";
 import { getAllArticles } from "@/services/articles";
 import type { CarComparison } from "@/data/comparisons";
 
-// Fallback images
-import bmwIx from "@/assets/bmw-ix.jpg";
-import mercedesEqs from "@/assets/mercedes-eqs.jpg";
-
 const Index = () => {
   const [articles, setArticles] = useState<CarComparison[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,16 +24,16 @@ const Index = () => {
     slug: articles[0].slug,
     car1: articles[0].car1.name,
     car2: articles[0].car2.name,
-    car1Image: articles[0].car1.image || bmwIx,
-    car2Image: articles[0].car2.image || mercedesEqs,
+    car1Image: articles[0].car1.image,
+    car2Image: articles[0].car2.image,
     category: articles[0].category,
     teaser: articles[0].intro,
   } : {
     slug: "",
     car1: "",
     car2: "",
-    car1Image: bmwIx,
-    car2Image: mercedesEqs,
+    car1Image: "",
+    car2Image: "",
     category: "",
     teaser: "",
   };
@@ -46,7 +42,7 @@ const Index = () => {
     slug: article.slug,
     car1: article.car1.name,
     car2: article.car2.name,
-    image: article.car1.image || bmwIx,
+    image: article.car1.image,
     category: article.category,
     excerpt: article.intro,
     date: article.date,
