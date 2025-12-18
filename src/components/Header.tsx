@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Menu, X, Search, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { CreateComparisonModal } from "@/components/CreateComparisonModal";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navItems = [
     { label: "Hem", href: "/" },
@@ -43,16 +44,15 @@ const Header = () => {
 
         {/* Search & Menu */}
         <div className="flex items-center gap-3">
-          <Link to="/skapa-jamforelse">
-            <Button 
-              variant="default" 
-              size="sm"
-              className="hidden md:flex items-center gap-2"
-            >
-              <Sparkles className="h-4 w-4" />
-              Skapa jämförelse
-            </Button>
-          </Link>
+          <Button 
+            variant="default" 
+            size="sm"
+            className="hidden md:flex items-center gap-2"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <Sparkles className="h-4 w-4" />
+            Skapa jämförelse
+          </Button>
           
           <Button 
             variant="ghost" 
@@ -89,6 +89,8 @@ const Header = () => {
           </div>
         </nav>
       )}
+
+      <CreateComparisonModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </header>
   );
 };
