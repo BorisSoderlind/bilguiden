@@ -13,6 +13,12 @@ dist-ssr
 *.local
 .env
 
+# Uploads folder - images are in Supabase Storage
+public/uploads/*.jpg
+public/uploads/*.jpeg
+public/uploads/*.png
+public/uploads/*.webp
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
