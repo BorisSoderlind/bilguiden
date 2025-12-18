@@ -1,14 +1,42 @@
 import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { ArrowLeft, Trophy, Check, X, Calendar, User } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { getComparisonBySlug } from "@/data/comparisons";
+import { getArticleBySlug } from "@/services/articles";
+import type { CarComparison } from "@/data/comparisons";
 
 const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const comparison = getComparisonBySlug(slug || "");
+  const [comparison, setComparison] = useState<CarComparison | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchArticle() {
+      if (!slug) {
+        setLoading(false);
+        return;
+      }
+      const data = await getArticleBySlug(slug);
+      setComparison(data);
+      setLoading(false);
+    }
+    fetchArticle();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container py-20 text-center">
+          <p className="text-xl">Laddar artikel...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!comparison) {
     return (

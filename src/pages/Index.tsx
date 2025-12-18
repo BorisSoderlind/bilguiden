@@ -1,84 +1,56 @@
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ComparisonCard from "@/components/ComparisonCard";
 import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import { Helmet } from "react-helmet-async";
+import { getAllArticles } from "@/services/articles";
+import type { CarComparison } from "@/data/comparisons";
 
+// Fallback images
 import bmwIx from "@/assets/bmw-ix.jpg";
 import mercedesEqs from "@/assets/mercedes-eqs.jpg";
-import volvoXc90 from "@/assets/volvo-xc90.jpg";
-import porscheTaycan from "@/assets/porsche-taycan.jpg";
-import teslaModelS from "@/assets/tesla-model-s.jpg";
-import audiQ7 from "@/assets/audi-q7.jpg";
 
 const Index = () => {
-  const heroComparison = {
-    slug: "bmw-ix-vs-mercedes-eqs-suv",
-    car1: "BMW iX",
-    car2: "Mercedes EQS SUV",
+  const [articles, setArticles] = useState<CarComparison[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchArticles() {
+      const data = await getAllArticles();
+      setArticles(data);
+      setLoading(false);
+    }
+    fetchArticles();
+  }, []);
+  const heroComparison = articles[0] ? {
+    slug: articles[0].slug,
+    car1: articles[0].car1.name,
+    car2: articles[0].car2.name,
+    car1Image: articles[0].car1.image || bmwIx,
+    car2Image: articles[0].car2.image || mercedesEqs,
+    category: articles[0].category,
+    teaser: articles[0].intro,
+  } : {
+    slug: "",
+    car1: "",
+    car2: "",
     car1Image: bmwIx,
     car2Image: mercedesEqs,
-    category: "VECKANS DUELL",
-    teaser: "Två tyska premium-elbilar möts i vår största jämförelse. Vem tar segern när innovation möter lyx?",
+    category: "",
+    teaser: "",
   };
 
-  const comparisons = [
-    {
-      slug: "volvo-xc90-vs-audi-q7",
-      car1: "Volvo XC90",
-      car2: "Audi Q7",
-      image: volvoXc90,
-      category: "STOR SUV",
-      excerpt: "Skandinavisk elegans möter tysk ingenjörskonst. Vi har kört båda i veckor för att hitta vinnaren.",
-      date: "15 december 2024",
-    },
-    {
-      slug: "porsche-taycan-vs-tesla-model-s",
-      car1: "Porsche Taycan",
-      car2: "Tesla Model S",
-      image: porscheTaycan,
-      category: "EL-SPORTBIL",
-      excerpt: "Sportvagnsikoner i en elektrisk tid. Kan Tesla matcha Porsches körupplevelse?",
-      date: "12 december 2024",
-    },
-    {
-      slug: "tesla-model-s-vs-mercedes-eqs",
-      car1: "Tesla Model S",
-      car2: "Mercedes EQS",
-      image: teslaModelS,
-      category: "PREMIUM ELBIL",
-      excerpt: "Tekniklösningar i världsklass ställs mot varandra i denna prestigefyllda duell.",
-      date: "10 december 2024",
-    },
-    {
-      slug: "audi-q7-vs-bmw-x5",
-      car1: "Audi Q7",
-      car2: "BMW X5",
-      image: audiQ7,
-      category: "STOR SUV",
-      excerpt: "Två av Tysklands mest populära familje-SUV:ar i en komplett jämförelse.",
-      date: "8 december 2024",
-    },
-    {
-      slug: "volvo-xc90-vs-audi-q7",
-      car1: "Volvo XC90",
-      car2: "Mercedes GLE",
-      image: volvoXc90,
-      category: "PREMIUM SUV",
-      excerpt: "Svensk säkerhet mot tysk komfort – vilken passar bäst för din familj?",
-      date: "6 december 2024",
-    },
-    {
-      slug: "porsche-taycan-vs-audi-e-tron-gt",
-      car1: "Porsche Taycan",
-      car2: "Audi e-tron GT",
-      image: porscheTaycan,
-      category: "SPORTBIL",
-      excerpt: "Två elbilar från samma koncern – men vilken ger mest för pengarna?",
-      date: "5 december 2024",
-    },
-  ];
+  const displayArticles = articles.slice(1, 7).map((article) => ({
+    slug: article.slug,
+    car1: article.car1.name,
+    car2: article.car2.name,
+    image: article.car1.image || bmwIx,
+    category: article.category,
+    excerpt: article.intro,
+    date: article.date,
+  }));
 
   return (
     <>
@@ -89,29 +61,37 @@ const Index = () => {
       
       <div className="min-h-screen bg-background">
         <Header />
-        <HeroSection comparison={heroComparison} />
-        
-        {/* Latest Comparisons Section */}
-        <section className="py-16 lg:py-24">
-          <div className="container">
-            <div className="flex items-center gap-4 mb-10">
-              <div className="h-1 w-12 bg-accent" />
-              <h2 className="font-display text-3xl md:text-4xl">
-                Senaste <span className="text-primary">jämförelserna</span>
-              </h2>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {comparisons.map((comparison, index) => (
-                <ComparisonCard
-                  key={index}
-                  {...comparison}
-                  index={index}
-                />
-              ))}
-            </div>
+        {loading ? (
+          <div className="container py-24 text-center">
+            <p className="text-xl">Laddar artiklar...</p>
           </div>
-        </section>
+        ) : (
+          <>
+            <HeroSection comparison={heroComparison} />
+            
+            {/* Latest Comparisons Section */}
+            <section className="py-16 lg:py-24">
+              <div className="container">
+                <div className="flex items-center gap-4 mb-10">
+                  <div className="h-1 w-12 bg-accent" />
+                  <h2 className="font-display text-3xl md:text-4xl">
+                    Senaste <span className="text-primary">jämförelserna</span>
+                  </h2>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {displayArticles.map((comparison, index) => (
+                    <ComparisonCard
+                      key={comparison.slug}
+                      {...comparison}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+          </>
+        )}
 
         {/* Categories Section */}
         <section className="py-16 bg-secondary">
