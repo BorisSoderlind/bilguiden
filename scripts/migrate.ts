@@ -15,16 +15,16 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-// Image paths as strings (instead of importing actual images)
+// Public image URLs
 const images: Record<string, string> = {
-  bmwIx: '/src/assets/bmw-ix.jpg',
-  mercedesEqs: '/src/assets/mercedes-eqs.jpg',
-  volvoXc90: '/src/assets/volvo-xc90.jpg',
-  audiQ7: '/src/assets/audi-q7.jpg',
-  porscheTaycan: '/src/assets/porsche-taycan.jpg',
-  teslaModelS: '/src/assets/tesla-model-s.jpg',
-  vwId4: '/src/assets/vw-id4.jpg',
-  hyundaiIoniq5: '/src/assets/hyundai-ioniq5.jpg',
+  bmwIx: 'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=800&q=80',
+  mercedesEqs: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80',
+  volvoXc90: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80',
+  audiQ7: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800&q=80',
+  porscheTaycan: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f8207?w=800&q=80',
+  teslaModelS: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80',
+  vwId4: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800&q=80',
+  hyundaiIoniq5: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&q=80',
 };
 
 // Data from comparisons.ts (without image imports)
