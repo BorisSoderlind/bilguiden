@@ -86,6 +86,18 @@ const Header = () => {
                 {item.label}
               </a>
             ))}
+            <Button 
+              variant="default" 
+              size="sm"
+              className="w-full mt-2 flex items-center justify-center gap-2 bg-[#2a2a2a] hover:bg-[#333333] text-white border border-gray-700"
+              onClick={() => {
+                setIsModalOpen(true);
+                setIsMenuOpen(false);
+              }}
+            >
+              <Sparkles className="h-4 w-4" />
+              Skapa jämförelse
+            </Button>
           </div>
         </nav>
       )}
