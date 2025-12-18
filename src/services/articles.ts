@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase';
-import type { CarComparison } from './comparisons';
+import type { CarComparison } from '@/data/comparisons';
 
 // Transform database row to CarComparison format
 function transformArticle(row: any): CarComparison {

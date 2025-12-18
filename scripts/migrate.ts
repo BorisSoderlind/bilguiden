@@ -203,14 +203,14 @@ async function migrate() {
   for (const comparison of comparisons) {
     console.log(`Migrating: ${comparison.car1.name} vs ${comparison.car2.name}`);
 
-    const { error } = await supabase.from('articles').insert({
+    const articleData = {
       slug: comparison.slug,
       category: comparison.category,
       date: comparison.date,
       author: comparison.author,
       intro: comparison.intro,
       verdict: comparison.verdict,
-      winner: comparison.winner === 'draw' ? null : comparison.winner,
+      winner: typeof comparison.winner === 'number' ? comparison.winner : null,
       
       car1_name: comparison.car1.name,
       car1_image: comparison.car1.image,
@@ -233,7 +233,9 @@ async function migrate() {
       car2_bagageutrymme: comparison.car2.specs.bagageutrymme,
       car2_pros: comparison.car2.pros,
       car2_cons: comparison.car2.cons,
-    });
+    };
+
+    const { error } = await supabase.from('articles').insert(articleData as any);
 
     if (error) {
       console.error(`Error migrating ${comparison.slug}:`, error);
