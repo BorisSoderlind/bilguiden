@@ -115,11 +115,18 @@ const ArticlePage = () => {
                     <Trophy className="h-6 w-6" />
                   </div>
                 )}
-                <img
-                  src={car1.image}
-                  alt={car1.name}
-                  className="w-full h-48 md:h-64 lg:h-80 object-cover rounded-lg"
-                />
+                <div className="relative">
+                  <img
+                    src={car1.image}
+                    alt={car1.name}
+                    className="w-full h-48 md:h-64 lg:h-80 object-cover rounded-lg"
+                  />
+                  {comparison.image_credit && (
+                    <div className="absolute bottom-2 left-2 right-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
+                      {comparison.image_credit}
+                    </div>
+                  )}
+                </div>
                 <div className="mt-4">
                   <h3 className="font-display text-xl text-primary-foreground">{car1.name}</h3>
                   <p className="text-accent font-display">{car1.price}</p>
@@ -131,24 +138,24 @@ const ArticlePage = () => {
                     <Trophy className="h-6 w-6" />
                   </div>
                 )}
-                <img
-                  src={car2.image}
-                  alt={car2.name}
-                  className="w-full h-48 md:h-64 lg:h-80 object-cover rounded-lg"
-                />
+                <div className="relative">
+                  <img
+                    src={car2.image}
+                    alt={car2.name}
+                    className="w-full h-48 md:h-64 lg:h-80 object-cover rounded-lg"
+                  />
+                  {comparison.image_credit && (
+                    <div className="absolute bottom-2 left-2 right-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-xs text-white">
+                      {comparison.image_credit}
+                    </div>
+                  )}
+                </div>
                 <div className="mt-4 text-right">
                   <h3 className="font-display text-xl text-primary-foreground">{car2.name}</h3>
                   <p className="text-accent font-display">{car2.price}</p>
                 </div>
               </div>
             </div>
-
-            {/* Image credit */}
-            {comparison.image_credit && (
-              <p className="text-xs text-muted-foreground mt-3 text-center">
-                {comparison.image_credit}
-              </p>
-            )}
           </div>
         </section>
 
