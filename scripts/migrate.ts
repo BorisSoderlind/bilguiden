@@ -1,5 +1,200 @@
-import { supabase } from '../src/lib/supabase';
-import { comparisons } from '../src/data/comparisons';
+import 'dotenv/config';
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '../src/lib/database.types';
+
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('Error: Missing Supabase environment variables in .env file');
+  console.error('Please create a .env file with:');
+  console.error('VITE_SUPABASE_URL=your_url');
+  console.error('VITE_SUPABASE_ANON_KEY=your_key');
+  process.exit(1);
+}
+
+const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+
+// Image paths as strings (instead of importing actual images)
+const images: Record<string, string> = {
+  bmwIx: '/src/assets/bmw-ix.jpg',
+  mercedesEqs: '/src/assets/mercedes-eqs.jpg',
+  volvoXc90: '/src/assets/volvo-xc90.jpg',
+  audiQ7: '/src/assets/audi-q7.jpg',
+  porscheTaycan: '/src/assets/porsche-taycan.jpg',
+  teslaModelS: '/src/assets/tesla-model-s.jpg',
+  vwId4: '/src/assets/vw-id4.jpg',
+  hyundaiIoniq5: '/src/assets/hyundai-ioniq5.jpg',
+};
+
+// Data from comparisons.ts (without image imports)
+const comparisons = [
+  {
+    slug: "bmw-ix-vs-mercedes-eqs-suv",
+    car1: {
+      name: "BMW iX",
+      image: images.bmwIx,
+      price: "975 000 kr",
+      specs: {
+        motor: "Dubbla elmotorer",
+        effekt: "523 hk",
+        acceleration: "0-100 km/h på 4,6 s",
+        räckvidd: "630 km (WLTP)",
+        bagageutrymme: "500 liter",
+      },
+      pros: [
+        "Fantastisk körupplevelse",
+        "Modern och innovativ teknik",
+        "Rymlig och komfortabel",
+        "Snabb laddning",
+      ],
+      cons: [
+        "Högt pris",
+        "Kontroversiell design",
+        "Vissa funktioner saknas som standard",
+      ],
+    },
+    car2: {
+      name: "Mercedes EQS SUV",
+      image: images.mercedesEqs,
+      price: "1 150 000 kr",
+      specs: {
+        motor: "Dubbla elmotorer",
+        effekt: "544 hk",
+        acceleration: "0-100 km/h på 4,5 s",
+        räckvidd: "590 km (WLTP)",
+        bagageutrymme: "645 liter",
+      },
+      pros: [
+        "Överlägsen komfort",
+        "Massiv infotainment-skärm",
+        "Hög kvalitetskänsla",
+        "Större bagageutrymme",
+      ],
+      cons: [
+        "Mycket dyrt",
+        "Tung och stor",
+        "Komplex användargränssnitt",
+      ],
+    },
+    category: "VECKANS DUELL",
+    date: "18 december 2024",
+    author: "Peter Andersson",
+    intro: "Två tyska premium-elbilar möts i vår största jämförelse. Vem tar segern när innovation möter lyx?",
+    verdict: "Båda bilarna är exceptionella på sina sätt. BMW iX vinner på körglädje och innovativa lösningar, medan Mercedes EQS SUV levererar överlägsen komfort och lyx. För den körglade köparen är iX förstahandsvalet, men för den som prioriterar komfort och status är EQS SUV värd extrakostnaden.",
+    winner: 1,
+  },
+  {
+    slug: "volvo-xc90-vs-audi-q7",
+    car1: {
+      name: "Volvo XC90",
+      image: images.volvoXc90,
+      price: "795 000 kr",
+      specs: {
+        motor: "B5 mild-hybrid",
+        effekt: "250 hk",
+        acceleration: "0-100 km/h på 7,2 s",
+        räckvidd: "850 km",
+        bagageutrymme: "640 liter",
+      },
+      pros: [
+        "Bästa säkerhetsutrustning",
+        "Skandinavisk design",
+        "Bekväm för långresor",
+        "Sjusitsig som standard",
+      ],
+      cons: [
+        "Mindre premium än konkurrenterna",
+        "Infotainment kan vara långsamt",
+        "Inte lika sportigt att köra",
+      ],
+    },
+    car2: {
+      name: "Audi Q7",
+      image: images.audiQ7,
+      price: "845 000 kr",
+      specs: {
+        motor: "3.0 TFSI mild-hybrid",
+        effekt: "340 hk",
+        acceleration: "0-100 km/h på 5,6 s",
+        räckvidd: "800 km",
+        bagageutrymme: "770 liter",
+      },
+      pros: [
+        "Kraftfull motor",
+        "Sportigt och bekvämt",
+        "Virtual Cockpit",
+        "Större bagageutrymme",
+      ],
+      cons: [
+        "Högre pris",
+        "Dyrare att underhålla",
+        "Mindre fokus på säkerhet",
+      ],
+    },
+    category: "STOR SUV",
+    date: "15 december 2024",
+    author: "Anna Svensson",
+    intro: "Skandinavisk elegans möter tysk ingenjörskonst. Vi har kört båda i veckor för att hitta vinnaren.",
+    verdict: "Volvo XC90 vinner för familjer som prioriterar säkerhet och skandinavisk design. Audi Q7 är bättre för den som vill ha mer prestanda och ett större bagageutrymme. Båda är utmärkta val i premiumklassen.",
+    winner: 1,
+  },
+  {
+    slug: "porsche-taycan-vs-tesla-model-s",
+    car1: {
+      name: "Porsche Taycan",
+      image: images.porscheTaycan,
+      price: "1 095 000 kr",
+      specs: {
+        motor: "Dubbla elmotorer",
+        effekt: "476 hk",
+        acceleration: "0-100 km/h på 4,0 s",
+        räckvidd: "484 km (WLTP)",
+        bagageutrymme: "366 liter",
+      },
+      pros: [
+        "Fenomenal körkänsla",
+        "Porsche-kvalitet",
+        "Snabb återkommande laddning",
+        "Tidlös design",
+      ],
+      cons: [
+        "Högre pris",
+        "Kortare räckvidd",
+        "Mindre bagageutrymme",
+      ],
+    },
+    car2: {
+      name: "Tesla Model S",
+      image: images.teslaModelS,
+      price: "1 045 000 kr",
+      specs: {
+        motor: "Dubbla elmotorer",
+        effekt: "670 hk",
+        acceleration: "0-100 km/h på 3,2 s",
+        räckvidd: "634 km (WLTP)",
+        bagageutrymme: "709 liter",
+      },
+      pros: [
+        "Överlägsen räckvidd",
+        "Otrolig acceleration",
+        "Tesla Supercharger-nätverk",
+        "Stort bagageutrymme",
+      ],
+      cons: [
+        "Sämre build quality",
+        "Minimalistisk interiör",
+        "Färre fysiska knappar",
+      ],
+    },
+    category: "EL-SPORTBIL",
+    date: "12 december 2024",
+    author: "Johan Bergström",
+    intro: "Sportvagnsikoner i en elektrisk tid. Kan Tesla matcha Porsches körupplevelse?",
+    verdict: "Porsche Taycan är den självklara vinnarenför den som prioriterar körglädje och premium-kvalitet. Tesla Model S erbjuder mer praktikalitet och bättre räckvidd till ett lägre pris. Välj Porsche för upplevelsen, Tesla för det rationella.",
+    winner: 1,
+  },
+];
 
 async function migrate() {
   console.log('Starting migration...');
