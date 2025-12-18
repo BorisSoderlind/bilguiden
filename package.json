@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "migrate": "tsx scripts/migrate.ts",
-    "update-images": "tsx scripts/update-images.ts"
+    "upload-images": "tsx scripts/upload-images.ts",
+    "update-db-images": "tsx scripts/update-db-images.ts"
   },
   "dependencies": {
     "@fontsource/inter": "^5.2.8",

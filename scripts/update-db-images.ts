@@ -12,19 +12,19 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
-// Public image URLs
+// Supabase Storage public URLs
 const imageUpdates: Record<string, { car1_image: string; car2_image: string }> = {
   'bmw-ix-vs-mercedes-eqs-suv': {
-    car1_image: 'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=800&q=80',
-    car2_image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&q=80',
+    car1_image: 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/bmw-ix.jpg',
+    car2_image: 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/mercedes-eqs.jpg',
   },
   'volvo-xc90-vs-audi-q7': {
-    car1_image: 'https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&q=80',
-    car2_image: 'https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800&q=80',
+    car1_image: 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/volvo-xc90.jpg',
+    car2_image: 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/audi-q7.jpg',
   },
   'porsche-taycan-vs-tesla-model-s': {
-    car1_image: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f8207?w=800&q=80',
-    car2_image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80',
+    car1_image: 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/porsche-taycan.jpg',
+    car2_image: 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/tesla-model-s.jpg',
   },
 };
 
@@ -39,7 +39,7 @@ async function updateImages() {
       .update({
         car1_image: images.car1_image,
         car2_image: images.car2_image,
-      })
+      } as any)
       .eq('slug', slug);
 
     if (error) {
