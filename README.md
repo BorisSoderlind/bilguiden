@@ -1,6 +1,6 @@
 # Bilguiden
 
-En modern webbapplikation för att jämföra och hitta rätt bil.
+En modern webbapplikation för att jämföra och hitta rätt bil med Supabase-integration.
 
 ## Teknologi
 
