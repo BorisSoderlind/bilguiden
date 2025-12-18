@@ -108,6 +108,20 @@ export default async function handler(
   }
 
   try {
+    // Validate environment variables
+    if (!process.env.GEMINI_API_KEY) {
+      console.error('Missing GEMINI_API_KEY');
+      return res.status(500).json({ error: 'Server configuration error: Missing API key' });
+    }
+    if (!process.env.VITE_SUPABASE_URL) {
+      console.error('Missing VITE_SUPABASE_URL');
+      return res.status(500).json({ error: 'Server configuration error: Missing Supabase URL' });
+    }
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('Missing SUPABASE_SERVICE_ROLE_KEY');
+      return res.status(500).json({ error: 'Server configuration error: Missing Supabase key' });
+    }
+
     const { car1, car2 } = req.body as GenerateComparisonRequest;
 
     if (!car1 || !car2) {
