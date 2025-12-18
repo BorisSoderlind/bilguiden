@@ -47,7 +47,7 @@ const Header = () => {
           <Button 
             variant="default" 
             size="sm"
-            className="hidden md:flex items-center gap-2"
+            className="hidden md:flex items-center gap-2 bg-[#2a2a2a] hover:bg-[#333333] text-white border border-gray-700"
             onClick={() => setIsModalOpen(true)}
           >
             <Sparkles className="h-4 w-4" />

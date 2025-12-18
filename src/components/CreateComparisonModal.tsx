@@ -76,10 +76,12 @@ export const CreateComparisonModal = ({ open, onOpenChange }: CreateComparisonMo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px] bg-gray-900 border-gray-800">
+      <DialogContent className="sm:max-w-[600px] bg-[#1a1a1a] border-black"
+        style={{ backgroundColor: '#1a1a1a' }}
+      >
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-2 text-white">
-            <Sparkles className="w-6 h-6 text-primary" />
+            <Sparkles className="w-6 h-6 text-gray-400" />
             Skapa AI-genererad jämförelse
           </DialogTitle>
           <DialogDescription className="text-gray-400">
@@ -91,10 +93,10 @@ export const CreateComparisonModal = ({ open, onOpenChange }: CreateComparisonMo
           <div className="space-y-2">
             <label className="text-sm font-medium text-white">Bil 1</label>
             <Select value={car1} onValueChange={setCar1}>
-              <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
+              <SelectTrigger className="bg-[#2a2a2a] border-gray-700 text-white">
                 <SelectValue placeholder="Välj första bilen" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-gray-700">
+              <SelectContent className="bg-[#2a2a2a] border-gray-700">
                 {categories.map((category) => (
                   <div key={category}>
                     <div className="px-2 py-1.5 text-sm font-semibold text-gray-400">
@@ -118,16 +120,16 @@ export const CreateComparisonModal = ({ open, onOpenChange }: CreateComparisonMo
           </div>
 
           <div className="flex items-center justify-center">
-            <div className="text-2xl font-bold text-primary">VS</div>
+            <div className="text-2xl font-bold text-gray-400">VS</div>
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-white">Bil 2</label>
             <Select value={car2} onValueChange={setCar2}>
-              <SelectTrigger className="bg-gray-800 border-gray-700 text-white">
+              <SelectTrigger className="bg-[#2a2a2a] border-gray-700 text-white">
                 <SelectValue placeholder="Välj andra bilen" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-gray-700">
+              <SelectContent className="bg-[#2a2a2a] border-gray-700">
                 {categories.map((category) => (
                   <div key={category}>
                     <div className="px-2 py-1.5 text-sm font-semibold text-gray-400">
@@ -153,7 +155,7 @@ export const CreateComparisonModal = ({ open, onOpenChange }: CreateComparisonMo
           <Button
             onClick={handleGenerate}
             disabled={isGenerating || !car1 || !car2}
-            className="w-full"
+            className="w-full bg-[#2a2a2a] hover:bg-[#333333] text-white border border-gray-700"
             size="lg"
           >
             {isGenerating ? (
@@ -170,7 +172,7 @@ export const CreateComparisonModal = ({ open, onOpenChange }: CreateComparisonMo
           </Button>
 
           {car1 && car2 && car1 !== car2 && (
-            <div className="mt-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="mt-4 p-4 bg-[#2a2a2a] rounded-lg border border-gray-700">
               <p className="text-sm text-gray-300">
                 <strong className="text-white">Förhandsgranskning:</strong> {car1} vs {car2}
               </p>

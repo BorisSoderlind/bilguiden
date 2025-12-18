@@ -34,6 +34,7 @@ export interface CarComparison {
   intro: string;
   verdict: string;
   winner: 1 | 2 | "draw";
+  image_credit?: string | null;
 }
 
 // Note: This file is kept for type definitions and legacy support

@@ -142,6 +142,13 @@ const ArticlePage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Image credit */}
+            {comparison.image_credit && (
+              <p className="text-xs text-muted-foreground mt-3 text-center">
+                {comparison.image_credit}
+              </p>
+            )}
           </div>
         </section>
 

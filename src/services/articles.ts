@@ -39,6 +39,7 @@ function transformArticle(row: any): CarComparison {
     intro: row.intro,
     verdict: row.verdict,
     winner: row.winner as 1 | 2 | "draw",
+    image_credit: row.image_credit,
   };
 }
 

@@ -3,10 +3,95 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || '';
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+interface ImageResult {
+  url: string;
+  credit?: string;
+  creditUrl?: string;
+}
+
+// Function to get car image - checks Supabase Storage first, then Unsplash as fallback
+const getCarImage = async (carName: string): Promise<ImageResult> => {
+  // Create URL-friendly filename from car name
+  const filename = carName.toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/å/g, 'a')
+    .replace(/ä/g, 'a')
+    .replace(/ö/g, 'o');
+  
+  // Check if image exists in Supabase Storage
+  const supabaseImageUrl = `${SUPABASE_URL}/storage/v1/object/public/car-images/${filename}.jpg`;
+  
+  try {
+    // Try to fetch the Supabase image
+    const response = await fetch(supabaseImageUrl, { method: 'HEAD' });
+    
+    if (response.ok) {
+      // Image exists in Supabase, use it (no credit needed for own images)
+      return { url: supabaseImageUrl };
+    }
+  } catch (error) {
+    console.log(`No image found in Supabase for ${carName}, trying Unsplash...`);
+  }
+  
+  // Fallback to Unsplash API
+  const UNSPLASH_ACCESS_KEY = process.env.UNSPLASH_ACCESS_KEY;
+  
+  if (!UNSPLASH_ACCESS_KEY) {
+    console.warn('No Unsplash API key configured, using placeholder');
+    return { 
+      url: 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/placeholder.jpg'
+    };
+  }
+  
+  try {
+    // Search Unsplash for the car
+    const searchQuery = encodeURIComponent(carName);
+    const unsplashUrl = `https://api.unsplash.com/search/photos?query=${searchQuery}&per_page=1&orientation=landscape`;
+    
+    const unsplashResponse = await fetch(unsplashUrl, {
+      headers: {
+        'Authorization': `Client-ID ${UNSPLASH_ACCESS_KEY}`
+      }
+    });
+    
+    if (!unsplashResponse.ok) {
+      throw new Error('Unsplash API request failed');
+    }
+    
+    const unsplashData = await unsplashResponse.json();
+    
+    if (unsplashData.results && unsplashData.results.length > 0) {
+      const photo = unsplashData.results[0];
+      // Return the image URL with photographer credit
+      return {
+        url: photo.urls.regular,
+        credit: `Photo by ${photo.user.name} on Unsplash`,
+        creditUrl: `${photo.user.links.html}?utm_source=bilguiden&utm_medium=referral`
+      };
+    }
+  } catch (error) {
+    console.error(`Failed to fetch from Unsplash for ${carName}:`, error);
+  }
+  
+  // Final fallback to placeholder
+  return { 
+    url: 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/placeholder.jpg'
+  };
+};
+
+const slugify = (text: string): string => {
+  return text
+    .toLowerCase()
+    .replace(/å/g, 'a')
+    .replace(/ä/g, 'a')
+    .replace(/ö/g, 'o')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
 
 interface GenerateComparisonRequest {
   car1: string; // brand + model, e.g., "BMW iX"
@@ -30,7 +115,7 @@ export default async function handler(
     }
 
     // Generate slug
-    const slug = `${car1.toLowerCase().replace(/\s+/g, '-')}-vs-${car2.toLowerCase().replace(/\s+/g, '-')}`;
+    const slug = slugify(`${car1} vs ${car2}`);
 
     // Check if comparison already exists
     const { data: existing } = await supabase
@@ -114,8 +199,11 @@ Viktigt:
       year: 'numeric' 
     });
 
-    // Placeholder image URL (can be replaced later)
-    const placeholderImage = 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/placeholder.jpg';
+    // Fetch images for both cars (Supabase first, then Unsplash fallback)
+    const [car1Image, car2Image] = await Promise.all([
+      getCarImage(comparisonData.car1.name),
+      getCarImage(comparisonData.car2.name)
+    ]);
 
     // Convert winner to proper format
     let winnerValue: number | null = null;
@@ -125,11 +213,17 @@ Viktigt:
       winnerValue = null;
     }
 
+    // Prepare image credits (combine if both are from Unsplash)
+    const credits: string[] = [];
+    if (car1Image.credit) credits.push(car1Image.credit);
+    if (car2Image.credit && car2Image.credit !== car1Image.credit) credits.push(car2Image.credit);
+    const imageCredit = credits.length > 0 ? credits.join(' | ') : null;
+
     // Prepare data for Supabase
     const articleData = {
       slug,
       car1_name: comparisonData.car1.name,
-      car1_image: placeholderImage,
+      car1_image: car1Image.url,
       car1_price: comparisonData.car1.price,
       car1_motor: comparisonData.car1.specs.motor,
       car1_effekt: comparisonData.car1.specs.effekt,
@@ -139,7 +233,7 @@ Viktigt:
       car1_pros: comparisonData.car1.pros,
       car1_cons: comparisonData.car1.cons,
       car2_name: comparisonData.car2.name,
-      car2_image: placeholderImage,
+      car2_image: car2Image.url,
       car2_price: comparisonData.car2.price,
       car2_motor: comparisonData.car2.specs.motor,
       car2_effekt: comparisonData.car2.specs.effekt,
@@ -154,6 +248,7 @@ Viktigt:
       intro: comparisonData.intro,
       verdict: comparisonData.verdict,
       winner: winnerValue,
+      image_credit: imageCredit,
     };
 
     // Insert into Supabase
