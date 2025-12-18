@@ -39,15 +39,15 @@ const CreateComparison = () => {
 
       if (!response.ok) {
         if (response.status === 409) {
-          toast.error("Jämförelsen finns redan!");
-          navigate(`/jamforelse/${data.slug}`);
+          toast.success("Denna jämförelse finns redan! Tar dig dit nu...");
+          navigate(`/artikel/${data.slug}`);
           return;
         }
         throw new Error(data.error || "Något gick fel");
       }
 
-      toast.success("Jämförelsen har skapats!");
-      navigate(`/jamforelse/${data.slug}`);
+      toast.success("Jämförelsen har skapats! 🎉");
+      navigate(`/artikel/${data.slug}`);
     } catch (error) {
       console.error("Error generating comparison:", error);
       toast.error(

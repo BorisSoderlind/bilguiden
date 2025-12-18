@@ -114,11 +114,22 @@ Viktigt:
       year: 'numeric' 
     });
 
+    // Placeholder image URL (can be replaced later)
+    const placeholderImage = 'https://spsiophqqmyaevlkrnrt.supabase.co/storage/v1/object/public/car-images/placeholder.jpg';
+
+    // Convert winner to proper format
+    let winnerValue: number | null = null;
+    if (comparisonData.winner === 1 || comparisonData.winner === 2) {
+      winnerValue = comparisonData.winner;
+    } else if (comparisonData.winner === 'draw') {
+      winnerValue = null;
+    }
+
     // Prepare data for Supabase
     const articleData = {
       slug,
       car1_name: comparisonData.car1.name,
-      car1_image: null, // Will be set manually or via another process
+      car1_image: placeholderImage,
       car1_price: comparisonData.car1.price,
       car1_motor: comparisonData.car1.specs.motor,
       car1_effekt: comparisonData.car1.specs.effekt,
@@ -128,7 +139,7 @@ Viktigt:
       car1_pros: comparisonData.car1.pros,
       car1_cons: comparisonData.car1.cons,
       car2_name: comparisonData.car2.name,
-      car2_image: null, // Will be set manually or via another process
+      car2_image: placeholderImage,
       car2_price: comparisonData.car2.price,
       car2_motor: comparisonData.car2.specs.motor,
       car2_effekt: comparisonData.car2.specs.effekt,
@@ -142,7 +153,7 @@ Viktigt:
       author: comparisonData.author,
       intro: comparisonData.intro,
       verdict: comparisonData.verdict,
-      winner: comparisonData.winner,
+      winner: winnerValue,
     };
 
     // Insert into Supabase
