@@ -115,6 +115,13 @@ export default async function handler(
       return res.status(500).json({ error: 'Server configuration error: Missing Supabase key' });
     }
 
+    // Initialize clients
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const supabase = createClient(
+      process.env.VITE_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+
     const { car1, car2 } = req.body as GenerateComparisonRequest;
 
     if (!car1 || !car2) {
@@ -208,8 +215,8 @@ Viktigt:
 
     // Fetch images for both cars (Supabase first, then Unsplash fallback)
     const [car1Image, car2Image] = await Promise.all([
-      getCarImage(comparisonData.car1.name),
-      getCarImage(comparisonData.car2.name)
+      getCarImage(comparisonData.car1.name, process.env.VITE_SUPABASE_URL, process.env.UNSPLASH_ACCESS_KEY),
+      getCarImage(comparisonData.car2.name, process.env.VITE_SUPABASE_URL, process.env.UNSPLASH_ACCESS_KEY)
     ]);
 
     // Convert winner to proper format
