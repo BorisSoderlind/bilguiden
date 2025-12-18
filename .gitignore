@@ -34,3 +34,5 @@ public/uploads/*.webp
 .env
 .env.local
 .env.production
+.vercel
+.env*.local
