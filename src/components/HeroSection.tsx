@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom";
 import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface HeroSectionProps {
   comparison: {
+    slug: string;
     car1: string;
     car2: string;
     car1Image: string;
@@ -36,13 +38,15 @@ const HeroSection = ({ comparison }: HeroSectionProps) => {
           {comparison.teaser}
         </p>
 
-        <Button 
-          size="lg"
-          className="bg-accent text-accent-foreground hover:bg-accent/90 font-display text-lg tracking-wide animate-slide-up delay-300 group"
-        >
-          Läs jämförelsen
-          <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-        </Button>
+        <Link to={`/artikel/${comparison.slug}`}>
+          <Button 
+            size="lg"
+            className="bg-accent text-accent-foreground hover:bg-accent/90 font-display text-lg tracking-wide animate-slide-up delay-300 group"
+          >
+            Läs jämförelsen
+            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </Link>
 
         {/* Car images */}
         <div className="mt-12 grid grid-cols-2 gap-4 lg:gap-8">

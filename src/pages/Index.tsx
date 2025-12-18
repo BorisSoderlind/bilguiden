@@ -8,12 +8,13 @@ import { Helmet } from "react-helmet-async";
 import bmwIx from "@/assets/bmw-ix.jpg";
 import mercedesEqs from "@/assets/mercedes-eqs.jpg";
 import volvoXc90 from "@/assets/volvo-xc90.jpg";
-import audiQ7 from "@/assets/audi-q7.jpg";
 import porscheTaycan from "@/assets/porsche-taycan.jpg";
 import teslaModelS from "@/assets/tesla-model-s.jpg";
+import audiQ7 from "@/assets/audi-q7.jpg";
 
 const Index = () => {
   const heroComparison = {
+    slug: "bmw-ix-vs-mercedes-eqs-suv",
     car1: "BMW iX",
     car2: "Mercedes EQS SUV",
     car1Image: bmwIx,
@@ -24,46 +25,52 @@ const Index = () => {
 
   const comparisons = [
     {
+      slug: "volvo-xc90-vs-audi-q7",
       car1: "Volvo XC90",
       car2: "Audi Q7",
       image: volvoXc90,
       category: "STOR SUV",
       excerpt: "Skandinavisk elegans möter tysk ingenjörskonst. Vi har kört båda i veckor för att hitta vinnaren.",
-      date: "18 december 2024",
+      date: "15 december 2024",
     },
     {
+      slug: "porsche-taycan-vs-tesla-model-s",
       car1: "Porsche Taycan",
       car2: "Tesla Model S",
       image: porscheTaycan,
       category: "EL-SPORTBIL",
       excerpt: "Sportvagnsikoner i en elektrisk tid. Kan Tesla matcha Porsches körupplevelse?",
-      date: "15 december 2024",
+      date: "12 december 2024",
     },
     {
+      slug: "tesla-model-s-vs-mercedes-eqs",
       car1: "Tesla Model S",
       car2: "Mercedes EQS",
       image: teslaModelS,
       category: "PREMIUM ELBIL",
       excerpt: "Tekniklösningar i världsklass ställs mot varandra i denna prestigefyllda duell.",
-      date: "12 december 2024",
+      date: "10 december 2024",
     },
     {
+      slug: "audi-q7-vs-bmw-x5",
       car1: "Audi Q7",
       car2: "BMW X5",
       image: audiQ7,
       category: "STOR SUV",
       excerpt: "Två av Tysklands mest populära familje-SUV:ar i en komplett jämförelse.",
-      date: "10 december 2024",
+      date: "8 december 2024",
     },
     {
+      slug: "volvo-xc90-vs-audi-q7",
       car1: "Volvo XC90",
       car2: "Mercedes GLE",
       image: volvoXc90,
       category: "PREMIUM SUV",
       excerpt: "Svensk säkerhet mot tysk komfort – vilken passar bäst för din familj?",
-      date: "8 december 2024",
+      date: "6 december 2024",
     },
     {
+      slug: "porsche-taycan-vs-audi-e-tron-gt",
       car1: "Porsche Taycan",
       car2: "Audi e-tron GT",
       image: porscheTaycan,
