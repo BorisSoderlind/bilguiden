@@ -77,10 +77,15 @@ CREATE POLICY "Allow authenticated update" ON articles
 
 ## Migration Script
 
-För att migrera befintlig data från `comparisons.ts` till Supabase, kör migration-scriptet:
+För att migrera befintlig data från `comparisons.ts` till Supabase:
+
+1. Se till att du har skapat `.env` filen med dina Supabase-credentials
+2. Kör migration-scriptet från projektets rot:
 
 ```bash
 npm run migrate
 ```
 
 Detta kommer att läsa data från `src/data/comparisons.ts` och lägga in den i Supabase-databasen.
+
+**OBS:** Scriptet körs från projektets rotmapp där package.json finns.
