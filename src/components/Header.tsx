@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Search, Sparkles } from "lucide-react";
+import { Menu, X, Search, Car } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CreateComparisonModal } from "@/components/CreateComparisonModal";
 
@@ -35,7 +35,7 @@ const Header = () => {
             <a
               key={item.label}
               href={item.href}
-              className="font-display text-sm tracking-wide hover:text-accent transition-colors duration-200"
+              className="font-display text-base tracking-wide hover:text-accent transition-colors duration-200"
             >
               {item.label}
             </a>
@@ -47,10 +47,10 @@ const Header = () => {
           <Button 
             variant="default" 
             size="sm"
-            className="hidden md:flex items-center gap-2 bg-[#2a2a2a] hover:bg-[#333333] text-white border border-gray-700"
+            className="hidden md:flex items-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground font-display tracking-wide"
             onClick={() => setIsModalOpen(true)}
           >
-            <Sparkles className="h-4 w-4" />
+            <Car className="h-5 w-5" />
             Skapa jämförelse
           </Button>
           
@@ -89,13 +89,13 @@ const Header = () => {
             <Button 
               variant="default" 
               size="sm"
-              className="w-full mt-2 flex items-center justify-center gap-2 bg-[#2a2a2a] hover:bg-[#333333] text-white border border-gray-700"
+              className="w-full mt-2 flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground font-display tracking-wide"
               onClick={() => {
                 setIsModalOpen(true);
                 setIsMenuOpen(false);
               }}
             >
-              <Sparkles className="h-4 w-4" />
+              <Car className="h-4 w-4" />
               Skapa jämförelse
             </Button>
           </div>

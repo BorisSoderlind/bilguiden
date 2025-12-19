@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { getArticleBySlug } from "@/services/articles";
+import { RatingsComparison } from "@/components/CarRatingsDisplay";
 import type { CarComparison } from "@/data/comparisons";
 
 const ArticlePage = () => {
@@ -61,6 +62,131 @@ const ArticlePage = () => {
     räckvidd: "Räckvidd",
     bagageutrymme: "Bagageutrymme",
   };
+
+  // Demo ratings - these would come from the database in production
+  const createDemoRatings = (carNum: 1 | 2) => ({
+    iq: {
+      name: "IQ" as const,
+      fullName: "Intelligence Quotient",
+      score: carNum === 1 ? 4.2 : 3.9,
+      categories: [
+        {
+          name: "Ekonomi",
+          score: carNum === 1 ? 4.0 : 3.8,
+          subRatings: [
+            { name: "Pris", weight: 20, score: carNum === 1 ? 4.0 : 3.5 },
+            { name: "Utrustningsnivå", weight: 5, score: carNum === 1 ? 4.5 : 4.0 },
+            { name: "Pris extrautrustning", weight: 5, score: carNum === 1 ? 3.5 : 4.0 },
+            { name: "Värdefall", weight: 30, score: carNum === 1 ? 4.0 : 3.5 },
+            { name: "Skatt", weight: 10, score: carNum === 1 ? 4.5 : 4.5 },
+            { name: "Energikostnad", weight: 15, score: carNum === 1 ? 4.0 : 4.0 },
+            { name: "Servicekostnad", weight: 10, score: carNum === 1 ? 3.5 : 4.0 },
+            { name: "Förmånsvärde", weight: 5, score: carNum === 1 ? 4.0 : 3.5 },
+          ],
+        },
+        {
+          name: "Kvalitet & Garanti",
+          score: carNum === 1 ? 4.3 : 4.0,
+          subRatings: [
+            { name: "Driftsäkerhet", weight: 50, score: carNum === 1 ? 4.5 : 4.0 },
+            { name: "Garantier", weight: 50, score: carNum === 1 ? 4.0 : 4.0 },
+          ],
+        },
+        {
+          name: "Säkerhet",
+          score: carNum === 1 ? 4.5 : 4.2,
+          subRatings: [
+            { name: "Euro NCAP", weight: 80, score: carNum === 1 ? 5.0 : 4.5 },
+            { name: "Bilens vikt", weight: 10, score: carNum === 1 ? 3.5 : 3.5 },
+            { name: "Säkerhetsutrustning", weight: 10, score: carNum === 1 ? 4.0 : 4.0 },
+          ],
+        },
+        {
+          name: "Miljö/Energi",
+          score: carNum === 1 ? 4.0 : 3.8,
+          subRatings: [
+            { name: "Förbrukning kWh/100 km", weight: 70, score: carNum === 1 ? 4.0 : 3.5 },
+            { name: "Energieffektivitet", weight: 30, score: carNum === 1 ? 4.0 : 4.5 },
+          ],
+        },
+      ],
+    },
+    tq: {
+      name: "TQ" as const,
+      fullName: "Technical Quotient",
+      score: carNum === 1 ? 4.1 : 4.3,
+      categories: [
+        {
+          name: "Komfort",
+          score: carNum === 1 ? 4.2 : 4.5,
+          subRatings: [
+            { name: "Sitta fram", weight: 25, score: carNum === 1 ? 4.5 : 4.5 },
+            { name: "Sitta bak", weight: 15, score: carNum === 1 ? 4.0 : 4.5 },
+            { name: "Fjädring", weight: 30, score: carNum === 1 ? 4.0 : 4.5 },
+            { name: "Ljudnivå", weight: 30, score: carNum === 1 ? 4.5 : 4.5 },
+          ],
+        },
+        {
+          name: "Kupéutrymme",
+          score: carNum === 1 ? 4.0 : 4.2,
+          subRatings: [
+            { name: "Fram", weight: 60, score: carNum === 1 ? 4.0 : 4.0 },
+            { name: "Bak", weight: 40, score: carNum === 1 ? 4.0 : 4.5 },
+          ],
+        },
+        {
+          name: "Bagageutrymme",
+          score: carNum === 1 ? 4.0 : 4.2,
+          subRatings: [
+            { name: "Frunk", weight: 15, score: carNum === 1 ? 4.0 : 4.5 },
+            { name: "Bagage bak", weight: 60, score: carNum === 1 ? 4.0 : 4.0 },
+            { name: "Fällt baksäte", weight: 15, score: carNum === 1 ? 4.0 : 4.5 },
+            { name: "Dragvikt", weight: 10, score: carNum === 1 ? 4.0 : 4.0 },
+          ],
+        },
+        {
+          name: "Teknik",
+          score: carNum === 1 ? 4.2 : 4.3,
+          subRatings: [
+            { name: "Självkörning", weight: 25, score: carNum === 1 ? 4.5 : 4.5 },
+            { name: "Infotainment", weight: 40, score: carNum === 1 ? 4.0 : 4.5 },
+            { name: "Navigation", weight: 20, score: carNum === 1 ? 4.0 : 4.0 },
+            { name: "Röststyrning", weight: 15, score: carNum === 1 ? 4.5 : 4.0 },
+          ],
+        },
+      ],
+    },
+    eq: {
+      name: "EQ" as const,
+      fullName: "Emotional Quotient",
+      score: carNum === 1 ? 4.4 : 4.1,
+      categories: [
+        {
+          name: "Aktiv körning",
+          score: carNum === 1 ? 4.5 : 4.0,
+          subRatings: [
+            { name: "Styrning", weight: 40, score: carNum === 1 ? 4.5 : 4.0 },
+            { name: "Chassi", weight: 30, score: carNum === 1 ? 4.5 : 4.0 },
+            { name: "Motor/växellåda", weight: 20, score: carNum === 1 ? 4.5 : 4.0 },
+            { name: "Motorljud", weight: 10, score: carNum === 1 ? 4.5 : 4.0 },
+          ],
+        },
+        {
+          name: "Design",
+          score: carNum === 1 ? 4.3 : 4.2,
+          subRatings: [
+            { name: "Exteriör", weight: 30, score: carNum === 1 ? 4.5 : 4.0 },
+            { name: "Interiör", weight: 30, score: carNum === 1 ? 4.0 : 4.5 },
+            { name: "Vill-ha-känsla", weight: 40, score: carNum === 1 ? 4.5 : 4.0 },
+          ],
+        },
+      ],
+    },
+    totalScore: carNum === 1 ? 4.2 : 4.1,
+  });
+
+  const car1Ratings = createDemoRatings(1);
+  const car2Ratings = createDemoRatings(2);
 
   return (
     <>
@@ -254,8 +380,24 @@ const ArticlePage = () => {
           </div>
         </section>
 
-        {/* Verdict */}
+        {/* Ratings Comparison */}
         <section className="py-16">
+          <div className="container">
+            <h2 className="font-display text-3xl mb-8">
+              <span className="text-primary">Detaljerade</span> betyg
+            </h2>
+
+            <RatingsComparison
+              car1Name={car1.name}
+              car1Ratings={car1Ratings}
+              car2Name={car2.name}
+              car2Ratings={car2Ratings}
+            />
+          </div>
+        </section>
+
+        {/* Verdict */}
+        <section className="py-16 bg-secondary">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
               <div className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 mb-6">
