@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
+import { searchCarWithImage } from "@/services/carinfo";
 import { ArrowLeft, Trophy, Check, X, Calendar, User } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -13,6 +14,8 @@ const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [comparison, setComparison] = useState<CarComparison | null>(null);
   const [loading, setLoading] = useState(true);
+  const [car1Image, setCar1Image] = useState<string | null>(null);
+  const [car2Image, setCar2Image] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchArticle() {
@@ -23,6 +26,16 @@ const ArticlePage = () => {
       const data = await getArticleBySlug(slug);
       setComparison(data);
       setLoading(false);
+
+      // Hämta car.info-bilder
+      if (data?.car1) {
+        searchCarWithImage(data.car1.make, data.car1.model, data.car1.year)
+          .then((res) => setCar1Image(res?.image || null));
+      }
+      if (data?.car2) {
+        searchCarWithImage(data.car2.make, data.car2.model, data.car2.year)
+          .then((res) => setCar2Image(res?.image || null));
+      }
     }
     fetchArticle();
   }, [slug]);
@@ -242,7 +255,7 @@ const ArticlePage = () => {
                   </div>
                 )}
                 <img
-                  src={car1.image}
+                  src={car1Image || car1.image}
                   alt={car1.name}
                   className="w-full h-48 md:h-64 lg:h-80 object-cover rounded-lg"
                 />
@@ -258,7 +271,7 @@ const ArticlePage = () => {
                   </div>
                 )}
                 <img
-                  src={car2.image}
+                  src={car2Image || car2.image}
                   alt={car2.name}
                   className="w-full h-48 md:h-64 lg:h-80 object-cover rounded-lg"
                 />
@@ -269,12 +282,7 @@ const ArticlePage = () => {
               </div>
             </div>
 
-            {/* Image credit */}
-            {comparison.image_credit && (
-              <p className="text-xs text-muted-foreground mt-2 text-center opacity-70">
-                {comparison.image_credit}
-              </p>
-            )}
+            {/* Image credit borttagen */}
           </div>
         </section>
 

@@ -26,6 +26,8 @@ import {
   type Model,
 } from "@/services/nhtsa";
 
+
+
 interface CreateComparisonModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -37,6 +39,8 @@ export const CreateComparisonModal = ({
 }: CreateComparisonModalProps) => {
   const navigate = useNavigate();
   const [isGenerating, setIsGenerating] = useState(false);
+
+
 
   // Car 1 state
   const [car1Make, setCar1Make] = useState<string>("");
@@ -55,6 +59,7 @@ export const CreateComparisonModal = ({
   const [car2ModelsLoading, setCar2ModelsLoading] = useState(false);
   const [car2Years, setCar2Years] = useState<number[]>([]);
   const [car2YearsLoading, setCar2YearsLoading] = useState(false);
+
 
   // All makes (loaded instantly)
   const [makes] = useState<Make[]>(() => getAllMakes());
