@@ -1,4 +1,4 @@
-import { Brain, Wrench, Heart, ChevronDown, ChevronUp } from "lucide-react";
+import { Brain, Wrench, Heart, ChevronDown, ChevronUp, Star } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -37,7 +37,7 @@ const RatingBar = ({ score, max = 5 }: { score: number; max?: number }) => {
     <div className="flex items-center gap-2 flex-1">
       <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
         <div
-          className="h-full bg-accent rounded-full transition-all duration-500"
+          className="h-full bg-primary rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -46,15 +46,17 @@ const RatingBar = ({ score, max = 5 }: { score: number; max?: number }) => {
   );
 };
 
-const RatingDots = ({ score }: { score: number }) => {
+const RatingStars = ({ score }: { score: number }) => {
   return (
-    <div className="flex gap-1">
-      {[1, 2, 3, 4, 5].map((dot) => (
-        <div
-          key={dot}
+    <div className="flex gap-0.5 w-24 flex-shrink-0">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
           className={cn(
-            "w-3 h-3 rounded-full transition-colors",
-            dot <= Math.round(score) ? "bg-accent" : "bg-gray-300"
+            "w-4 h-4 transition-colors",
+            star <= Math.round(score) 
+              ? "fill-primary text-primary" 
+              : "fill-gray-200 text-gray-200"
           )}
         />
       ))}
@@ -69,14 +71,14 @@ const CategorySection = ({ category }: { category: CategoryRating }) => {
     <div className="border-b border-gray-200 last:border-b-0">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full py-3 px-4 flex items-center justify-between hover:bg-gray-100 transition-colors"
+        className="w-full py-4 px-6 flex items-center justify-between hover:bg-gray-100 transition-colors"
       >
-        <div className="flex items-center gap-3">
-          <span className="font-medium text-foreground">{category.name}</span>
-          <RatingDots score={category.score} />
+        <div className="flex items-center gap-4">
+          <span className="font-medium text-foreground w-40 flex-shrink-0 text-left">{category.name}</span>
+          <RatingStars score={category.score} />
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-accent font-bold">{category.score.toFixed(1)}</span>
+          <span className="text-black font-bold">{category.score.toFixed(1)}</span>
           {isExpanded ? (
             <ChevronUp className="h-4 w-4 text-gray-500" />
           ) : (
@@ -86,12 +88,11 @@ const CategorySection = ({ category }: { category: CategoryRating }) => {
       </button>
 
       {isExpanded && (
-        <div className="px-4 pb-3 space-y-2 bg-gray-50">
+        <div className="px-6 pb-5 pt-2 space-y-3 bg-gray-50">
           {category.subRatings.map((sub) => (
-            <div key={sub.name} className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">
+            <div key={sub.name} className="flex items-center gap-4 text-sm py-1">
+              <span className="text-gray-600 w-40 flex-shrink-0 text-left">
                 {sub.name}
-                <span className="text-gray-400 ml-1">({sub.weight}%)</span>
               </span>
               <RatingBar score={sub.score} />
             </div>
@@ -148,7 +149,7 @@ const MainRatingSection = ({ rating }: { rating: MainRatingData }) => {
         )}
       >
         <div className="flex items-center gap-3">
-          <div className="bg-white/20 p-2 rounded-lg">{getIcon()}</div>
+          <div className="bg-white p-2 rounded-lg shadow-sm">{getIcon()}</div>
           <div className="text-left">
             <h3 className="font-display text-xl text-white">{rating.name}</h3>
             <p className="text-sm text-white/80">{getDescription()}</p>
@@ -179,44 +180,37 @@ const MainRatingSection = ({ rating }: { rating: MainRatingData }) => {
 };
 
 const TotalScoreDisplay = ({ score }: { score: number }) => {
-  const getScoreColor = (score: number) => {
-    if (score >= 4.5) return "text-green-600";
-    if (score >= 4.0) return "text-green-500";
-    if (score >= 3.5) return "text-yellow-500";
-    if (score >= 3.0) return "text-orange-500";
-    return "text-red-500";
-  };
-
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 text-center border border-gray-200 shadow-sm">
-      <div className="text-sm text-gray-500 uppercase tracking-wide mb-2">
-        Totalbetyg
-      </div>
-      <div className={cn("text-5xl font-bold mb-2", getScoreColor(score))}>
-        {score.toFixed(1)}
-      </div>
-      <div className="text-sm text-gray-400">av 5.0</div>
-      <div className="mt-4 flex justify-center gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <div
-            key={star}
-            className={cn(
-              "w-4 h-4 rounded-full",
-              star <= Math.round(score) ? "bg-accent" : "bg-gray-300"
-            )}
-          />
-        ))}
-      </div>
-    </div>
+        <div className="bg-hero rounded-lg p-6 text-center border border-gray-900 shadow-sm">
+          <h3 className="text-lg md:text-xl text-white uppercase tracking-wide mb-4 font-display">
+            Totalbetyg
+          </h3>
+          <div className="text-5xl font-bold mb-2 text-accent">
+            {score.toFixed(1)}
+          </div>
+          <div className="text-sm text-white/70">av 5.0</div>
+          <div className="mt-4 flex justify-center gap-1">
+            {[1, 2, 3, 4, 5].map((s) => (
+              <Star
+                key={s}
+                className={cn(
+                  "w-5 h-5 transition-colors",
+                  s <= Math.round(score) 
+                    ? "fill-accent text-accent" 
+                    : "fill-gray-700 text-gray-700"
+                )}
+              />
+            ))}
+          </div>
+        </div>
   );
 };
 
 export const CarRatingsDisplay = ({ carName, ratings }: CarRatingsDisplayProps) => {
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h3 className="font-display text-2xl mb-2">{carName}</h3>
-        <TotalScoreDisplay score={ratings.totalScore} />
+      <div className="mb-4">
+        <h3 className="font-display text-2xl">{carName}</h3>
       </div>
 
       <div className="space-y-4">
@@ -224,6 +218,8 @@ export const CarRatingsDisplay = ({ carName, ratings }: CarRatingsDisplayProps) 
         <MainRatingSection rating={ratings.tq} />
         <MainRatingSection rating={ratings.eq} />
       </div>
+
+      <TotalScoreDisplay score={ratings.totalScore} />
     </div>
   );
 };
